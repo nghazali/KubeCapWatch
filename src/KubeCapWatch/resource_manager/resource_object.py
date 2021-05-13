@@ -72,12 +72,12 @@ class ResourceObject:
             self.mem_limit_hits = 0
             self.mem_hits = 0
 
-    def update_memory(self, limit, request):
+    def update_memory(self, request, limit):
         self.mem_limit = limit
         self.mem_request = request
         self.__hit_mem()
 
-    def update_cpu(self, limit, request):
+    def update_cpu(self, request, limit):
         self.cpu_limit = limit
         self.cpu_request = request
         self.__hit_cpu()
@@ -91,17 +91,17 @@ class ResourceObject:
         if self.mem_hits > 0:
             mem_message = f" [memory request: {self.mem_request}% , memory limit: {self.mem_limit}%]"
 
-        if watch_type=="all" and (self.cpu_hits==1 or self.mem_hits == 1):
-            if self.cpu_hits>0 and self.mem_hits>0:
+        if watch_type == "all" and (self.cpu_hits == 1 or self.mem_hits == 1):
+            if self.cpu_hits > 0 and self.mem_hits > 0:
                 message = ' and'
-            message = cpu_message+message+mem_message
+            message = f"{cpu_message}{message}{mem_message}"
         elif watch_type == 'cpu' and self.cpu_hits == 1:
             message = cpu_message
         elif watch_type == 'memory' and self.mem_hits == 1:
             message = mem_message
 
         if message != '':
-            message = f"{self.resource_type} {self.resource_name} is under stress:{message}"
+            message = f"[{self.resource_type}] {self.resource_name} is under stress:{message}"
 
         return message
 

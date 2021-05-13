@@ -1,15 +1,16 @@
 from flask_restful import Resource, Api, reqparse
-import agent
-
 
 class KubeCapWarch_start(Resource):
+	def __init__(self, actor):
+		self.manager = actor
+
 	def get(self):
-		if agent.manager.status:
+		if self.manager.status:
 			data = 'KubeCapWatch service is already running!'
 		else:
-			agent.manager.start()
+			self.manager.start()
 			data = "KubCapWatch service is started! \n"
-			data += agent.manager.report()
+			data += self.manager.report()
 
 		return {'data': data}, 200
 
@@ -23,9 +24,12 @@ class KubeCapWarch_start(Resource):
 
 
 class KubeCapWarch_stop(Resource):
+	def __init__(self, actor):
+		self.manager = actor
+
 	def get(self):
-		if agent.manager.status:
-			agent.manager.stop()
+		if self.manager.status:
+			self.manager.stop()
 			data = "KubCapWatch service is stopped!"
 		else:
 			data = 'KubeCapWatch service is already stopped!'
@@ -34,9 +38,14 @@ class KubeCapWarch_stop(Resource):
 
 
 class KubeCapWarch_status(Resource):
+
+	def __init__(self, actor):
+		self.manager = actor
+
 	def get(self):
-		if agent.manager.status:
-			data = "KubeCapWatch service is 'running'!"
+		if self.manager.status:
+			data = "KubeCapWatch service is 'running'!\n\n"
+			data += self.manager.report()
 		else:
 			data = "KubCapWatch service is 'stopped'!"
 		return {'data': data}, 200

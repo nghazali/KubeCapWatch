@@ -50,12 +50,12 @@ def set_config():
 	}
 
 
-def set_api():
+def set_api(manager):
 	app = Flask(__name__)
 	api = Api(app)
-	api.add_resource(services.KubeCapWarch_start, '/service/start')
-	api.add_resource(services.KubeCapWarch_stop, '/service/stop')
-	api.add_resource(services.KubeCapWarch_status, '/service/status')
+	api.add_resource(services.KubeCapWarch_start, '/service/start', resource_class_kwargs={'actor': manager})
+	api.add_resource(services.KubeCapWarch_stop, '/service/stop', resource_class_kwargs={'actor': manager})
+	api.add_resource(services.KubeCapWarch_status, '/service/status', resource_class_kwargs={'actor': manager})
 	return app
 
 
@@ -80,13 +80,17 @@ def set_agent(config):
 	return manager
 
 
-config = set_config()
-app_service = set_api()
-manager = set_agent(config)
+def initialization():
+	config = set_config()
+	manager = set_agent(config)
+	app_service = set_api(manager)
+	return app_service, manager
+
+app_service, manager = initialization()
 
 
 if __name__ == "__main__":
 	print("Kube Capacity Watcher is starting....")
-	# app_service.run()  # run KubeCapWatch Flusk app
 	manager.start()
+	app_service.run()  # run KubeCapWatch Flusk app
 

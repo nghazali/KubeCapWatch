@@ -36,9 +36,9 @@ class CapacityManager:
         self.node_list = {}
         self.pod_list = {}
         self.mem_limit_query = f"mem_limit > {self.mem_limit_threshold}"
-        self.mem_request_query = f"mem_limit > {self.mem_request_threshold}"
-        self.cpu_limit_query = f"mem_limit > {self.cpu_limit_threshold}"
-        self.cpu_request_query = f"mem_limit > {self.cpu_request_threshold}"
+        self.mem_request_query = f"mem_requests > {self.mem_request_threshold}"
+        self.cpu_limit_query = f"cpu_limit > {self.cpu_limit_threshold}"
+        self.cpu_request_query = f"cpu_requests > {self.cpu_request_threshold}"
 
     def report(self):
         self.__update_data()
@@ -47,8 +47,8 @@ class CapacityManager:
     def start(self):
         if ~self.running:
             self.running = True
+            self.scan_resources()
             return 'Service is started!'
-            self.__scan_resources()
         else:
             return 'Service is already started!'
 
@@ -62,10 +62,10 @@ class CapacityManager:
     def status(self):
         return self.running
 
-    def __scan_resources(self):
+    def scan_resources(self):
         if self.running:
-            threading.Timer(self.interval, self.__scan_resources).start()
-            self.update()
+            threading.Timer(self.interval, self.scan_resources).start()
+        self.update()
 
     def __generate_report(self):
         report = ''
@@ -84,7 +84,6 @@ class CapacityManager:
 
     def update(self):
         self.__update_data()
-        report = self.__generate_report()
         self.__notify()
 
     def __update_data(self):

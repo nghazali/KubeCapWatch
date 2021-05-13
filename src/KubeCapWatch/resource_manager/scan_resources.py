@@ -18,8 +18,8 @@ class Scanner:
         'node_name',
         'pod_name',
         'namespace',
-        'cpu_request',
-        'mem_request',
+        'cpu_requests',
+        'mem_requests',
         'cpu_limit',
         'mem_limit'
     ]

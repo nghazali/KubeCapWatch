@@ -91,23 +91,30 @@ class KubeCapWatch:
         return manager
 
     def start(self):
-        if 'manager' not in globals():
+        msg = ''
+        try:
+            msg = self.manager.start()
+        except:
             self.manager = self.__initialization()
-        return self.manager.start()
+            msg = self.manager.start()
+        return msg
 
     def status(self):
-        if 'manager' not in globals():
+        try:
             return self.manager.status()
-        return False
+        except:
+            return False
 
     def stop(self):
-        if 'manager' not in globals():
-            self.manager.stop()
+        try:
+            msg = self.manager.stop()
             del self.manager
-        else:
+            return msg
+        except:
             return 'Service is not running!'
 
     def report(self):
-        if 'manager' not in globals():
+        try:
             return self.manager.report()
-        return 'Service is not running!'
+        except:
+            return 'Service is not running!'

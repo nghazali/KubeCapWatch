@@ -11,7 +11,6 @@ def __set_api(KubeCapWatch):
 	api.add_resource(services.KubeCapWarch_start, '/service/start', resource_class_kwargs={'actor': KubeCapWatch})
 	api.add_resource(services.KubeCapWarch_stop, '/service/stop', resource_class_kwargs={'actor': KubeCapWatch})
 	api.add_resource(services.KubeCapWarch_status, '/service/status', resource_class_kwargs={'actor': KubeCapWatch})
-	api.add_resource(services.KubeCapWarch_report, '/service/report', resource_class_kwargs={'actor': KubeCapWatch})
 	return app
 
 if __name__ == "__main__":

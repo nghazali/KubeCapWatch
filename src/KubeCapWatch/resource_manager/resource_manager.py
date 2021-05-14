@@ -66,7 +66,6 @@ class CapacityManager:
         return self.running
 
     def scan_resources(self):
-        print(self.running)
         if self.running:
             threading.Timer(self.interval, self.scan_resources).start()
         self.update()
@@ -84,8 +83,10 @@ class CapacityManager:
         return report
 
     def __notify(self):
-        for notifier in self.notifiers:
-            notifier.notify(self.__generate_report())
+        _report = self.__generate_report()
+        if _report is not '':
+            for notifier in self.notifiers:
+                notifier.notify(_report)
 
     def update(self):
         self.__update_data()
@@ -99,10 +100,10 @@ class CapacityManager:
     def __update_nodes(self, nodes):
         node_keys = list(self.node_list.keys())
         critical_nodes = pandas.concat([
-            nodes.query(self.mem_limit_query),
-            nodes.query(self.mem_request_query),
-            nodes.query(self.cpu_limit_query),
-            nodes.query(self.cpu_request_query)
+                nodes.query(self.mem_limit_query),
+                nodes.query(self.mem_request_query),
+                nodes.query(self.cpu_limit_query),
+                nodes.query(self.cpu_request_query)
         ], ignore_index=True).drop_duplicates()
         for index, node in critical_nodes.iterrows():
             key = node['node_name']
@@ -117,10 +118,10 @@ class CapacityManager:
     def __update_pods(self, pods):
         pod_keys = list(self.pod_list.keys())
         critical_pods = pandas.concat([
-            pods.query(self.mem_limit_query),
-            pods.query(self.mem_request_query),
-            pods.query(self.cpu_limit_query),
-            pods.query(self.cpu_request_query)
+                pods.query(self.mem_limit_query),
+                pods.query(self.mem_request_query),
+                pods.query(self.cpu_limit_query),
+                pods.query(self.cpu_request_query)
         ], ignore_index=True).drop_duplicates()
         for index, pod in critical_pods.iterrows():
             key = f"{pod['node_name']}_{pod['pod_name']}"

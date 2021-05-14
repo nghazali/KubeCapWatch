@@ -48,16 +48,3 @@ class KubeCapWarch_status(Resource):
 		else:
 			data = "KubCapWatch service is 'stopped'!"
 		return {'data': data}, 200
-
-
-class KubeCapWarch_report(Resource):
-
-	def __init__(self, actor):
-		self.manager = actor
-
-	def get(self):
-		if self.manager.status():
-			data = self.manager.report()
-		else:
-			data = "KubCapWatch service is 'stopped'!"
-		return {'data': data}, 200

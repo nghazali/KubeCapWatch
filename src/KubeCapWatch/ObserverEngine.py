@@ -20,9 +20,9 @@ class KubeCapWatch:
         config.sections()
         config.read('config.ini')
         scope = config.get('DEFAULT', 'scope', fallback='all')
-        namespace = config.get('DEFAULT', 'namespace', fallback='').split()
+        namespace = config.get('DEFAULT', 'namespace', fallback='').split(',')
         interval = int(config.get('DEFAULT', 'interval', fallback='5'))
-        notifiers = config.get('DEFAULT', 'notifiers', fallback='console').split()
+        notifiers = config.get('DEFAULT', 'notifiers', fallback='console').split(',')
 
         report_type = config.get('DEFAULT', 'report_type', fallback='all')
         max_hit = int(config.get('DEFAULT', 'reminder_count', fallback='5'))

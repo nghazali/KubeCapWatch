@@ -5,12 +5,11 @@ class KubeCapWarch_start(Resource):
 		self.manager = actor
 
 	def get(self):
-		if self.manager.status:
+		if self.manager.status():
 			data = 'KubeCapWatch service is already running!'
 		else:
 			self.manager.start()
-			data = "KubCapWatch service is started! \n"
-			data += self.manager.report()
+			data = "KubCapWatch service is started!"
 
 		return {'data': data}, 200
 
@@ -28,7 +27,7 @@ class KubeCapWarch_stop(Resource):
 		self.manager = actor
 
 	def get(self):
-		if self.manager.status:
+		if self.manager.status():
 			self.manager.stop()
 			data = "KubCapWatch service is stopped!"
 		else:
@@ -43,9 +42,22 @@ class KubeCapWarch_status(Resource):
 		self.manager = actor
 
 	def get(self):
-		if self.manager.status:
-			data = "KubeCapWatch service is 'running'!\n\n"
-			data += self.manager.report()
+		if self.manager.status():
+			data = "KubeCapWatch service is 'running'!"
+			data = [data, self.manager.report()]
+		else:
+			data = "KubCapWatch service is 'stopped'!"
+		return {'data': data}, 200
+
+
+class KubeCapWarch_report(Resource):
+
+	def __init__(self, actor):
+		self.manager = actor
+
+	def get(self):
+		if self.manager.status():
+			data = self.manager.report()
 		else:
 			data = "KubCapWatch service is 'stopped'!"
 		return {'data': data}, 200

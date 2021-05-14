@@ -9,10 +9,9 @@ class CapacityManager:
     cpu_limit_threshold = 90
     cpu_request_threshold = 90
 
-
     def __init__(self,
                  scanner,
-                 notifier,
+                 notifiers,
                  interval=30,
                  mem_limit_threshold=90,
                  mem_request_threshold=90,
@@ -21,7 +20,7 @@ class CapacityManager:
                  max_hit=100,
                  report_type='all'):
         self.scanner = scanner
-        self.notifier = notifier
+        self.notifiers = notifiers
         self.interval = interval
         self.mem_limit_threshold = mem_limit_threshold
         self.mem_request_threshold = mem_request_threshold
@@ -41,8 +40,12 @@ class CapacityManager:
         self.cpu_request_query = f"cpu_requests > {self.cpu_request_threshold}"
 
     def report(self):
-        self.__update_data()
-        return self.__generate_report()
+        nodes, pods = self.scanner.scan()
+        return nodes.to_json(), pods.to_json()
+
+    def test(self):
+        nodes, pods = self.scanner.scan()
+        return nodes, pods
 
     def start(self):
         if ~self.running:
@@ -63,6 +66,7 @@ class CapacityManager:
         return self.running
 
     def scan_resources(self):
+        print(self.running)
         if self.running:
             threading.Timer(self.interval, self.scan_resources).start()
         self.update()
@@ -80,7 +84,8 @@ class CapacityManager:
         return report
 
     def __notify(self):
-        self.notifier.notify(self.__generate_report())
+        for notifier in self.notifiers:
+            notifier.notify(self.__generate_report())
 
     def update(self):
         self.__update_data()

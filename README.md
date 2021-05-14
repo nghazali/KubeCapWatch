@@ -64,9 +64,9 @@ Kube Capacity Watcher is starting....
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-This will run a webserver and user can command to start observation by running the following services:
+This will run a webserver and user can command to start observation by running the following end points:
 
-* start the service: http://127.0.0.1:5000/service/start
-* stop the service: http://127.0.0.1:5000/service/stop
-* get the status of service: http://127.0.0.1:5000/service/status
+* start the service: **/service/start**
+* stop the service: **/service/stop**
+* get the status of service: **/service/status**
 

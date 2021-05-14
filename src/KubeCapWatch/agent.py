@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-import os
 import ObserverEngine
 import services
 
@@ -14,11 +13,14 @@ def __set_api(KubeCapWatch):
 	return app
 
 if __name__ == "__main__":
-	kcw = ObserverEngine.KubeCapWatch()
-	app_service = __set_api(kcw)
+	svc = ObserverEngine.KubeCapWatch()
+	app_service = __set_api(svc)
 	print("Kube Capacity Watcher is starting....")
-	# kcw.start()
-	# os.system('read -s -n 1 -p "Press Ctrl+C to exit..."')
-	# kcw.stop()
-	app_service.run()  # run KubeCapWatch Flusk app
+	# run KubeCapWatch Flask app - we can control the service directly without Flask app by
+	# calling the svc.start() and svc.stop() methods
+	app_service.run()
+
+
+
+
 

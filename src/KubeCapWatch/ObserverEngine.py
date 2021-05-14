@@ -9,6 +9,7 @@ import scan_resources
 import slack
 import console
 import email_module
+import logger
 
 class KubeCapWatch:
 
@@ -37,6 +38,8 @@ class KubeCapWatch:
         subject = config.get('email', 'subject', fallback='Resource Shortage Warning in Kubernetes Cluster')
         smpt_server = config.get('email', 'smpt_server', fallback='localhost')
         email_address = config.get('email', 'email_address', fallback='support@atlassian.com')
+        logfile = config.get('logger', 'logfile', fallback='log.txt')
+
 
         return {
             'scope': scope,
@@ -53,7 +56,8 @@ class KubeCapWatch:
             'mem_request_threshold': mem_request_threshold,
             'email_address': email_address,
             'smtp_server': smpt_server,
-            'subject': subject
+            'subject': subject,
+            'logfile': logfile
         }
 
 
@@ -83,12 +87,15 @@ class KubeCapWatch:
                 notifiers.append(console.console_notifier(config['agent_name']))
             elif notifier == 'email':
                 notifiers.append(email_module.email_notifier(config['smtp_server'], config['subject'], config['email_address']))
+            elif notifier == 'logger':
+                notifiers.append(logger.log_notifier(config['agent_name'], config['logfile']))
         return notifiers
 
     def __initialization(self):
         config = self.__set_config()
         manager = self.__set_agent(config)
         return manager
+
 
     def start(self):
         msg = ''
@@ -110,11 +117,5 @@ class KubeCapWatch:
             msg = self.manager.stop()
             del self.manager
             return msg
-        except:
-            return 'Service is not running!'
-
-    def report(self):
-        try:
-            return self.manager.report()
         except:
             return 'Service is not running!'

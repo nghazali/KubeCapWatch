@@ -4,7 +4,7 @@ class console_notifier:
         self.agent_name = agent_name
 
 
-    # Posting to a Slack channel
+    # Posting to the Console
     def notify(self, text):
         if text == '':
             return

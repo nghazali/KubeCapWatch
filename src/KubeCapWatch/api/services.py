@@ -44,7 +44,6 @@ class KubeCapWarch_status(Resource):
 	def get(self):
 		if self.manager.status():
 			data = "KubeCapWatch service is 'running'!"
-			data = [data, self.manager.report()]
 		else:
 			data = "KubCapWatch service is 'stopped'!"
 		return {'data': data}, 200

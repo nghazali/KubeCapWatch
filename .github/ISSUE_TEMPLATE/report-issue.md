@@ -23,12 +23,5 @@ assignees: ''
 
 **Screenshots (if applicable)**
 
-**More Input(please run and report the output of the relevant commands):**
-$ kubectl get pods
-$ kubectl describe pods
-$ kubectl describe sts
-$ kubectl describe pv
-$ kubectl describe pvc
-$kubectl logs <pod name>
 
 **Additional context**

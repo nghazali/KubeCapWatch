@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-this is a [test](https://support.atlassian.com/)
-
 **Describe the bug**
 
 
